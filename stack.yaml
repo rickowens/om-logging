@@ -1,0 +1,7 @@
+flags: {}
+packages:
+- .
+extra-deps:
+  - git: git@github.com:owensmurray/om-show.git
+    commit: 523fd1f8e8e7e5f6bf492ec8db7c01c9a6d2b551
+resolver: lts-16.26

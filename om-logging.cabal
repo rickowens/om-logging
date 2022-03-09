@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                om-logging
-version:             1.0.0.1
+version:             1.0.0.2
 synopsis:            Opinionated logging utilities.
 description:         Opinionated logging utilities.
 homepage:            https://github.com/owensmurray/om-logging

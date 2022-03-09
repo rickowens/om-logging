@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                om-logging
-version:             1.0.0.1
+version:             1.0.0.2
 synopsis:            Opinionated logging utilities.
 description:         Opinionated logging utilities.
 homepage:            https://github.com/owensmurray/om-logging
@@ -28,6 +28,7 @@ library
     fast-logger  >= 3.0.5     && < 3.1,
     monad-logger >= 0.3.36    && < 0.4,
     om-show      >= 0.1.1.3   && < 0.2,
+    split        >= 0.2.3.4   && < 0.3,
     text         >= 1.2.4.1   && < 1.3,
     time         >= 1.9.3     && < 1.10
   hs-source-dirs:      src

@@ -31,6 +31,8 @@ import Control.Monad (when)
 import Control.Monad.Logger (LogLevel(LevelDebug, LevelError, LevelInfo,
   LevelOther, LevelWarn), Loc, LogSource, LogStr, loc_package)
 import Data.Aeson (FromJSON(parseJSON), Value(String))
+import Data.List (intercalate)
+import Data.List.Split (splitOn)
 import Data.String (IsString)
 import Data.Text (Text)
 import Data.Time (getCurrentTime)
@@ -126,7 +128,25 @@ withPackage
   -> LogStr
   -> IO ()
 withPackage base loc src level msg =
-  let package = toLogStr . squareBracket . loc_package $ loc
+  let
+    {-
+      The package information looks like this
+      `om-legion-6.4.1.1-LnoDD8xLijN7DglolZGFIp`, but we only want the
+      actual package name, which is why we do the `reverse . split`
+      business.
+    -}
+    package =
+      toLogStr
+      . squareBracket
+      $ case
+          reverse
+          . splitOn "-"
+          . loc_package
+          $ loc
+        of
+          _hash : _version : nameComponents ->
+            intercalate "-" (reverse nameComponents)
+          _ -> loc_package loc
   in base loc src level (package <> msg)
 
 

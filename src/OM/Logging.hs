@@ -213,6 +213,7 @@ standardLogging logLevel =
   filterLogging (levelFilter logLevel)
   . withPrefix ": "
   . withThread
+  . withPackage
   . withLevel
   . withTime
   $ stdoutLogging

@@ -4,6 +4,7 @@
 module OM.Logging (
   -- * Standard OM logging
   standardLogging,
+  withStandardFormat,
 
   -- * Logging Combinators
   withTime,
@@ -210,13 +211,28 @@ standardLogging
   -> LogStr
   -> IO ()
 standardLogging logLevel =
+  withStandardFormat logLevel stdoutLogging
+
+
+{- |
+  Log to the indicated destination, applying the "standard" filters
+  and formats.
+-}
+withStandardFormat
+  :: LogLevel {- ^ The minimum log level that will be logged. -}
+  -> (Loc -> LogSource -> LogLevel -> LogStr -> IO ()) {- ^ The base logger. -}
+  -> Loc
+  -> LogSource
+  -> LogLevel
+  -> LogStr
+  -> IO ()
+withStandardFormat logLevel =
   filterLogging (levelFilter logLevel)
   . withPrefix ": "
   . withThread
   . withPackage
   . withLevel
   . withTime
-  $ stdoutLogging
 
 
 {- | A FromJSON instance to figure out the logging level. -}

@@ -4,6 +4,7 @@
 module OM.Logging (
   -- * Standard OM logging
   standardLogging,
+  withStandardFormat,
 
   -- * Logging Combinators
   withTime,
@@ -19,6 +20,7 @@ module OM.Logging (
   -- ** Destinations
   teeLogging,
   stdoutLogging,
+  fdLogging,
 
   -- * Other types
   parseLevel,
@@ -38,7 +40,7 @@ import Data.Text (Text)
 import Data.Time (getCurrentTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 import OM.Show (showt)
-import System.IO (hFlush, stdout)
+import System.IO (Handle, hFlush, stdout)
 import System.Log.FastLogger (fromLogStr, toLogStr)
 import qualified Data.ByteString.Char8 as BS8
 import qualified Data.Text as T
@@ -196,23 +198,47 @@ showLevel level = T.toUpper . T.drop 5 . showt $ level
   conjunction with some of the other combinators, like `withLevel`.
 -}
 stdoutLogging :: Loc -> LogSource -> LogLevel -> LogStr -> IO ()
-stdoutLogging _ _ _ msg = do
-  BS8.putStr (fromLogStr msg <> "\n")
-  hFlush stdout
+stdoutLogging = fdLogging stdout
+
+
+{- | Like 'stdoutLogging', but log to a file handle. -}
+fdLogging :: Handle -> Loc -> LogSource -> LogLevel -> LogStr -> IO ()
+fdLogging fd _ _ _ msg = do
+  BS8.hPutStr fd (fromLogStr msg <> "\n")
+  hFlush fd
 
 
 {- | The standard logging for most OM programs. -}
 standardLogging
   :: LogLevel
-  -> IO (Loc -> LogSource -> LogLevel -> LogStr -> IO ())
+  -> Loc
+  -> LogSource
+  -> LogLevel
+  -> LogStr
+  -> IO ()
 standardLogging logLevel =
-  pure
-  . filterLogging (levelFilter logLevel)
+  withStandardFormat logLevel stdoutLogging
+
+
+{- |
+  Log to the indicated destination, applying the "standard" filters
+  and formats.
+-}
+withStandardFormat
+  :: LogLevel {- ^ The minimum log level that will be logged. -}
+  -> (Loc -> LogSource -> LogLevel -> LogStr -> IO ()) {- ^ The base logger. -}
+  -> Loc
+  -> LogSource
+  -> LogLevel
+  -> LogStr
+  -> IO ()
+withStandardFormat logLevel =
+  filterLogging (levelFilter logLevel)
   . withPrefix ": "
   . withThread
+  . withPackage
   . withLevel
   . withTime
-  $ stdoutLogging
 
 
 {- | A FromJSON instance to figure out the logging level. -}

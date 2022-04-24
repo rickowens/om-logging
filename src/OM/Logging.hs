@@ -204,10 +204,13 @@ stdoutLogging _ _ _ msg = do
 {- | The standard logging for most OM programs. -}
 standardLogging
   :: LogLevel
-  -> IO (Loc -> LogSource -> LogLevel -> LogStr -> IO ())
+  -> Loc
+  -> LogSource
+  -> LogLevel
+  -> LogStr
+  -> IO ()
 standardLogging logLevel =
-  pure
-  . filterLogging (levelFilter logLevel)
+  filterLogging (levelFilter logLevel)
   . withPrefix ": "
   . withThread
   . withLevel

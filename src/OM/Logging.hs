@@ -20,6 +20,7 @@ module OM.Logging (
   -- ** Destinations
   teeLogging,
   stdoutLogging,
+  fdLogging,
 
   -- * Other types
   parseLevel,
@@ -39,7 +40,7 @@ import Data.Text (Text)
 import Data.Time (getCurrentTime)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 import OM.Show (showt)
-import System.IO (hFlush, stdout)
+import System.IO (Handle, hFlush, stdout)
 import System.Log.FastLogger (fromLogStr, toLogStr)
 import qualified Data.ByteString.Char8 as BS8
 import qualified Data.Text as T
@@ -197,9 +198,14 @@ showLevel level = T.toUpper . T.drop 5 . showt $ level
   conjunction with some of the other combinators, like `withLevel`.
 -}
 stdoutLogging :: Loc -> LogSource -> LogLevel -> LogStr -> IO ()
-stdoutLogging _ _ _ msg = do
-  BS8.putStr (fromLogStr msg <> "\n")
-  hFlush stdout
+stdoutLogging = fdLogging stdout
+
+
+{- | Like 'stdoutLogging', but log to a file handle. -}
+fdLogging :: Handle -> Loc -> LogSource -> LogLevel -> LogStr -> IO ()
+fdLogging fd _ _ _ msg = do
+  BS8.hPutStr fd (fromLogStr msg <> "\n")
+  hFlush fd
 
 
 {- | The standard logging for most OM programs. -}

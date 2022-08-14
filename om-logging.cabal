@@ -1,6 +1,6 @@
 cabal-version:       3.0
 name:                om-logging
-version:             1.1.0.0
+version:             1.1.0.1
 synopsis:            Opinionated logging utilities.
 description:         Opinionated logging utilities.
 homepage:            https://github.com/owensmurray/om-logging

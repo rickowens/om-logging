@@ -1,0 +1,6 @@
+packages:
+  "."
+package om-logging
+  ghc-options:
+    -Werror
+

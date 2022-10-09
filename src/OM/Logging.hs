@@ -1,6 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{- | Logging utilities. -}
+{- |
+  Description: Logging utilities.
+
+  Various combinators for composing "monad-logger" loggers.
+-}
 module OM.Logging (
   -- * Standard OM logging
   standardLogging,

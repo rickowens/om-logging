@@ -2,16 +2,18 @@ cabal-version:       3.0
 name:                om-logging
 version:             1.1.0.3
 synopsis:            Opinionated logging utilities.
-description:         Opinionated logging utilities.
+description:         A set of logging combinators for use with monad-logger.
 homepage:            https://github.com/owensmurray/om-logging
-license:             NONE
+license:             MIT
 license-file:        LICENSE
 author:              Rick Owens
 maintainer:          rick@owensmurray.com
 copyright:           2021 Owens Murray, LLC.
--- category:            
+category:            logging
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:
+  README.md
+  LICENSE
 
 common dependencies
   build-depends:

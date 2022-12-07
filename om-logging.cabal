@@ -17,15 +17,15 @@ extra-source-files:
 
 common dependencies
   build-depends:
-    , aeson        >= 2.0.3.0   && < 2.1
-    , base         >= 4.15.0.0  && < 4.16
-    , bytestring   >= 0.10.12.1 && < 0.11
+    , aeson        >= 2.1.1.0   && < 2.2
+    , base         >= 4.17      && < 4.18
+    , bytestring   >= 0.11.3.1  && < 0.12
     , fast-logger  >= 3.1.1     && < 3.2
     , monad-logger >= 0.3.36    && < 0.4
     , om-show      >= 0.1.2.0   && < 0.2
     , split        >= 0.2.3.4   && < 0.3
-    , text         >= 1.2.5.0   && < 1.3
-    , time         >= 1.9.3     && < 1.10
+    , text         >= 2.0.1     && < 2.1
+    , time         >= 1.12.2    && < 1.13
 
 common warnings
   ghc-options:

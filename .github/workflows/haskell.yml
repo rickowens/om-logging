@@ -1,4 +1,4 @@
-on: [pull_request]
+on: [push]
 name: Haskell Builds
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
       - name: Configure the Build
         run: |
           rm cabal.project.freeze
-          cabal configure
+          cabal configure --enable-tests
           cabal build --dry-run
 
       # Restore cache
@@ -57,9 +57,12 @@ jobs:
       # Cabal build
       - name: Cabal Bulid
         run: |
-          project="$(cat cabal.project | grep -v -- '-Werror')"
-          echo "$project" > cabal.project
           cabal build all
+
+      # Cabal tests
+      - name: Cabal Test
+        run: |
+          cabal test all
 
   build-lower-bounds:
     name: Haskell Build (lower bounds)
@@ -88,11 +91,19 @@ jobs:
           (cat << EOF
           packages: .
           constraints:
-            base == 4.15.1.0
+            aeson == 2.0.3.0,
+            base == 4.15.1.0,
+            bytestring == 0.11.3.1,
+            fast-logger == 3.1.1,
+            monad-logger == 0.3.36,
+            om-show == 0.1.2.6,
+            split == 0.2.3.4,
+            text == 1.2.5.0,
+            time == 1.12.2
           EOF
           ) > cabal.project
           rm cabal.project.freeze
-          cabal configure
+          cabal configure --enable-tests
           cabal build --dry-run
 
       # Restore cache
@@ -117,9 +128,12 @@ jobs:
           path: ${{ steps.setup.outputs.cabal-store }}
           key: ${{ steps.cache.outputs.cache-primary-key }}
 
-      # Cabal build
+      # Cabal Build
       - name: Cabal Bulid
         run: cabal build all
 
+      # Cabal Test
+      - name: Cabal Test
+        run: cabal test all
 
 
